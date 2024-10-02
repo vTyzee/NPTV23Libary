@@ -6,13 +6,15 @@ import java.util.UUID;
 public class Book {
     private UUID id;
     private String title;
-    private Author[] authors = new Author[10];
+    private Author[] authors;
     private int publisherYear;
 
+    // Default constructor
     public Book() {
         this.id = UUID.randomUUID();
     }
 
+    // Constructor with parameters
     public Book(String title, Author[] authors, int publisherYear) {
         this.id = UUID.randomUUID();
         this.title = title;
@@ -20,14 +22,7 @@ public class Book {
         this.publisherYear = publisherYear;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
+    // Getters and Setters
     public String getTitle() {
         return title;
     }
@@ -50,29 +45,6 @@ public class Book {
 
     public void setPublisherYear(int publisherYear) {
         this.publisherYear = publisherYear;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Book book = (Book) o;
-
-        if (publisherYear != book.publisherYear) return false;
-        if (!id.equals(book.id)) return false;
-        if (!title.equals(book.title)) return false;
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(authors, book.authors);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + title.hashCode();
-        result = 31 * result + Arrays.hashCode(authors);
-        result = 31 * result + publisherYear;
-        return result;
     }
 
     @Override

@@ -1,18 +1,21 @@
 package org.example;
 
-import java.util.Scanner;
+import org.example.App;
+import org.example.handlers.BookHandler;
+import org.example.interfaces.BookProvider;
+import org.example.interfaces.InputProvider;
+import org.example.interfaces.impl.ConsoleInput;
+import org.example.interfaces.impl.InputBook;
 
 public class NPTV23Libary {
     public static void main(String[] args) {
-        System.out.println("-------------NPTV23Libary-------------");
+        InputProvider inputProvider = new ConsoleInput();  // Initialize ConsoleInput
+        BookProvider bookProvider = new InputBook();  // Initialize InputBook
+        BookHandler bookHandler = new BookHandler(inputProvider, bookProvider);  // Pass input and book provider to handler
 
-        // Instantiate Scanner here and pass it to the App class
-        Scanner scanner = new Scanner(System.in);
-        App app = new App(scanner);
-
-        app.run();
-
-        // Close the scanner when done
-        scanner.close();
+        System.out.println("-------------NPTV23Libary-------------Vers+1.00.05");
+        App app = new App(bookHandler, inputProvider);  // Pass BookHandler and InputProvider to App
+        app.run();  // Start the application
     }
 }
+

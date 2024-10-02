@@ -1,6 +1,6 @@
 package org.example.model;
 
-import java.util.Objects;
+
 import java.util.UUID;
 
 public class Author {
@@ -10,26 +10,17 @@ public class Author {
 
     // Default constructor
     public Author() {
-        this.id = UUID.randomUUID(); // Generate a random UUID by default
+        this.id = UUID.randomUUID();
     }
 
     // Constructor with parameters
     public Author(String authorName, String authorSurname) {
-        this.id = UUID.randomUUID(); // Generate a random UUID
+        this.id = UUID.randomUUID();
         this.authorName = authorName;
         this.authorSurname = authorSurname;
     }
 
-    // Getter and Setter for 'id'
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    // Getter and Setter for 'authorName'
+    // Getters and Setters
     public String getAuthorName() {
         return authorName;
     }
@@ -38,7 +29,6 @@ public class Author {
         this.authorName = authorName;
     }
 
-    // Getter and Setter for 'authorSurname'
     public String getAuthorSurname() {
         return authorSurname;
     }
@@ -47,7 +37,6 @@ public class Author {
         this.authorSurname = authorSurname;
     }
 
-    // toString method
     @Override
     public String toString() {
         return "Author{" +
@@ -55,22 +44,5 @@ public class Author {
                 ", authorName='" + authorName + '\'' +
                 ", authorSurname='" + authorSurname + '\'' +
                 '}';
-    }
-
-    // equals method
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Author author = (Author) o;
-        return Objects.equals(id, author.id) &&
-                Objects.equals(authorName, author.authorName) &&
-                Objects.equals(authorSurname, author.authorSurname);
-    }
-
-    // hashCode method
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, authorName, authorSurname);
     }
 }
