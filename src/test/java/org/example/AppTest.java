@@ -1,67 +1,53 @@
 package org.example;
 
+import org.example.handlers.BookHandler;
+import org.example.interfaces.BookProvider;
+import org.example.interfaces.InputProvider;
+import org.example.model.Author;
+import org.example.model.Book;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.Scanner;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
 
 class AppTest {
-
-    private InputStream originalIn;
-    private App app;
-
+    ByteArrayOutputStream outDefault;
+    ByteArrayOutputStream outContent;
     @BeforeEach
     void setUp() {
-        // Save the original System.in to restore it later
-        originalIn = System.in;
+        outDefault= new ByteArrayOutputStream();
+        outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
     }
 
-    @Test
-    void testRunExitImmediately() {
-        // Provide "0\n" as input to simulate user input for exiting
-        String input = "0\n";
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        // Instantiate the App with the scanner containing our input
-        app = new App(scanner);
-        app.run();
-
-        // Since we can't directly verify the output here, the fact that the code completes without errors means it worked
-        assertTrue(true);
+    @AfterEach
+    void tearDown() {
+        System.setOut(new PrintStream(outDefault));
     }
-
     @Test
-    void testRunInvalidInputThenExit() {
-        // Provide invalid input "abc\n" followed by "0\n"
-        String input = "abc\n0\n";
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        // Instantiate the App with the scanner containing our input
-        app = new App(scanner);
+    void testAppRunExit() {
+        InputProvider inputMock = Mockito.mock(InputProvider.class);
+        when(inputMock.getInput()).thenReturn("0");
+        BookProvider bookProviderMock = Mockito.mock(BookProvider.class);
+        Author[] authors = new Author[0];
+        when(bookProviderMock.createBook(inputMock)).thenReturn(new Book("War n' peace", authors, 2000));
+        authors = new Author[1];
+        Author author = new Author("Lev", "Tolstoy");
+        authors[0] = author;
+        BookHandler bookHandler = new BookHandler(inputMock, bookProviderMock);
+        App app = new App(bookHandler, inputMock);
         app.run();
-
-        // As above, if the code completes, the handling worked as expected
-        assertTrue(true);
-    }
-
-    @Test
-    void testRunAddBookThenExit() {
-        // Provide input "1\n0\n" to simulate selecting "Добавить книгу" and then exiting
-        String input = "1\n0\n";
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-        Scanner scanner = new Scanner(System.in);
-
-        // Instantiate the App with the scanner containing our input
-        app = new App(scanner);
-        app.run();
-
-        // Again, we're ensuring that if the code completes, it worked correctly
-        assertTrue(true);
+        String outContentString = outContent.toString();
+        System.setOut(new PrintStream(outDefault));
+        System.out.println(outContentString);
+        assertTrue(outContent.toString().contains("До свидания :)"));
     }
 }
