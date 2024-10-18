@@ -1,56 +1,34 @@
 package org.example.interfaces.impl;
 
 import org.example.interfaces.BookProvider;
-import org.example.interfaces.InputProvider;
+import org.example.interfaces.Input;
 import org.example.model.Author;
 import org.example.model.Book;
 
 public class InputBook implements BookProvider {
 
     @Override
-    public Book createBook(InputProvider inputProvider) {
-        // Создаем новую книгу
-        Book book = new Book();
-
-        // Вводим название книги
+    public Book createBook(Input input) {
         System.out.print("Введите название книги: ");
-        book.setTitle(inputProvider.getInput());
+        String title = input.getInput();
 
-        // Вводим количество авторов
-        System.out.print("Количество авторов: ");
-        int countAuthors = Integer.parseInt(inputProvider.getInput());
+        System.out.print("Введите автора: ");
+        String authorFirstName = input.getInput();
+        System.out.print("Введите фамилию автора: ");
+        String authorLastName = input.getInput();
 
-        // Массив для авторов
-        Author[] authors = new Author[countAuthors];
+        Author author = new Author(authorFirstName, authorLastName);
+        Author[] authors = {author};
 
-        // Вводим информацию о каждом авторе
-        for (int i = 0; i < countAuthors; i++) {
-            System.out.println("(" + (i + 1) + ") автор: ");
-
-            // Создаем автора
-            Author author = new Author();
-
-            // Вводим имя автора
-            System.out.print("Имя автора: ");
-            author.setAuthorName(inputProvider.getInput());
-
-            // Вводим фамилию автора
-            System.out.print("Фамилия автора: ");
-            author.setAuthorSurname(inputProvider.getInput());
-
-            // Добавляем автора в массив
-            authors[i] = author;
+        System.out.print("Введите год выпуска книги: ");
+        int year;
+        try {
+            year = Integer.parseInt(input.getInput());
+        } catch (NumberFormatException e) {
+            System.out.println("Неверный формат года.");
+            return null;
         }
 
-        // Устанавливаем массив авторов в книгу
-        book.setAuthors(authors);
-
-        // Вводим год публикации
-        System.out.print("Введите год публикации книги: ");
-        int year = Integer.parseInt(inputProvider.getInput());  // Читаем год публикации
-        book.setPublisherYear(year);  // Устанавливаем год публикации
-
-        // Возвращаем созданную книгу
-        return book;
+        return new Book(title, authors, year);
     }
 }

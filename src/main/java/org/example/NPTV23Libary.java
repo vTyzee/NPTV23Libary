@@ -1,21 +1,24 @@
 package org.example;
 
-import org.example.App;
-import org.example.handlers.BookHandler;
-import org.example.interfaces.BookProvider;
-import org.example.interfaces.InputProvider;
+import org.example.Services.BookService;
+import org.example.Services.UserService;
 import org.example.interfaces.impl.ConsoleInput;
+import org.example.interfaces.impl.ConsoleUserProvider;
 import org.example.interfaces.impl.InputBook;
 
 public class NPTV23Libary {
     public static void main(String[] args) {
-        InputProvider inputProvider = new ConsoleInput();  // Initialize ConsoleInput
-        BookProvider bookProvider = new InputBook();  // Initialize InputBook
-        BookHandler bookHandler = new BookHandler(inputProvider, bookProvider);  // Pass input and book provider to handler
+        // Создаем необходимые сервисы и провайдеры
+        ConsoleInput consoleInput = new ConsoleInput();
+        InputBook inputBook = new InputBook();
+        BookService bookService = new BookService(inputBook);
+        ConsoleUserProvider userProvider = new ConsoleUserProvider();
+        UserService userService = new UserService(userProvider);
 
-        System.out.println("-------------NPTV23Libary-------------Vers+1.00.05");
-        App app = new App(bookHandler, inputProvider);  // Pass BookHandler and InputProvider to App
-        app.run();  // Start the application
+        // Создаем приложение
+        App app = new App(bookService, userService, consoleInput);
+
+        // Запуск приложения
+        app.run();
     }
 }
-

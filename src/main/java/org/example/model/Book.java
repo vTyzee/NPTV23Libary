@@ -1,59 +1,38 @@
 package org.example.model;
 
-import java.util.Arrays;
-import java.util.UUID;
-
 public class Book {
-    private UUID id;
     private String title;
     private Author[] authors;
-    private int publisherYear;
+    private int year;
+    private User borrower; // Читатель, который взял книгу
 
-    // Default constructor
-    public Book() {
-        this.id = UUID.randomUUID();
-    }
-
-    // Constructor with parameters
-    public Book(String title, Author[] authors, int publisherYear) {
-        this.id = UUID.randomUUID();
+    public Book(String title, Author[] authors, int year) {
         this.title = title;
         this.authors = authors;
-        this.publisherYear = publisherYear;
+        this.year = year;
+        this.borrower = null; // Изначально книга не занята
     }
 
-    // Getters and Setters
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public User getBorrower() {
+        return borrower;
     }
 
-    public Author[] getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(Author[] authors) {
-        this.authors = authors;
-    }
-
-    public int getPublisherYear() {
-        return publisherYear;
-    }
-
-    public void setPublisherYear(int publisherYear) {
-        this.publisherYear = publisherYear;
+    public void setBorrower(User borrower) {
+        this.borrower = borrower;
     }
 
     @Override
     public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", authors=" + Arrays.toString(authors) +
-                ", publisherYear=" + publisherYear +
-                '}';
+        StringBuilder authorNames = new StringBuilder();
+        for (Author author : authors) {
+            authorNames.append(author.toString()).append(", ");
+        }
+
+        String borrowerInfo = (borrower != null) ? ", Взял: " + borrower.getName() : ", Доступна";
+        return "Книга: " + title + ", Авторы: " + authorNames + "Год: " + year + borrowerInfo;
     }
 }
